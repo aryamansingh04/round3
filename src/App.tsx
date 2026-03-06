@@ -3,8 +3,9 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import DashboardPage from "./pages/DashboardPage";
+import { VehiclesProvider } from "./contexts/VehiclesContext";
 import AlertsPage from "./pages/AlertsPage";
 import VehiclesPage from "./pages/VehiclesPage";
 import VehicleDetailPage from "./pages/VehicleDetailPage";
@@ -31,18 +32,20 @@ function PageTransition(props: { children: React.ReactNode }) {
 function AppRoutes() {
   const location = useLocation();
   return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<PageTransition><LandingPage /></PageTransition>} />
-        <Route path="/dashboard" element={<PageTransition><DashboardPage /></PageTransition>} />
-        <Route path="/alerts" element={<PageTransition><AlertsPage /></PageTransition>} />
-        <Route path="/vehicles" element={<PageTransition><VehiclesPage /></PageTransition>} />
-        <Route path="/vehicles/:id" element={<PageTransition><VehicleDetailPage /></PageTransition>} />
-        <Route path="/telemetry" element={<PageTransition><LiveTelemetryPage /></PageTransition>} />
-        <Route path="/insights" element={<PageTransition><InsightsPage /></PageTransition>} />
-        <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
-      </Routes>
-    </AnimatePresence>
+    <LayoutGroup>
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<PageTransition><LandingPage /></PageTransition>} />
+          <Route path="/dashboard" element={<PageTransition><DashboardPage /></PageTransition>} />
+          <Route path="/alerts" element={<PageTransition><AlertsPage /></PageTransition>} />
+          <Route path="/vehicles" element={<PageTransition><VehiclesPage /></PageTransition>} />
+          <Route path="/vehicles/:id" element={<PageTransition><VehicleDetailPage /></PageTransition>} />
+          <Route path="/telemetry" element={<PageTransition><LiveTelemetryPage /></PageTransition>} />
+          <Route path="/insights" element={<PageTransition><InsightsPage /></PageTransition>} />
+          <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
+        </Routes>
+      </AnimatePresence>
+    </LayoutGroup>
   );
 }
 
@@ -52,7 +55,9 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <AppRoutes />
+        <VehiclesProvider>
+          <AppRoutes />
+        </VehiclesProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

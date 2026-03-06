@@ -1,12 +1,25 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
-import { vehicles } from '@/data/mockData';
+import { Search, ChevronLeft, ChevronRight, Plus } from 'lucide-react';
+import { useVehicles } from '@/contexts/VehiclesContext';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+  DialogHeader,
+  DialogFooter,
+} from '@/components/ui/dialog';
 
 export function VehicleSidebar() {
   const [search, setSearch] = useState('');
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
+  const { vehicles, addVehicle } = useVehicles();
+  const [addOpen, setAddOpen] = useState(false);
+  const [newName, setNewName] = useState('');
+  const [newPlate, setNewPlate] = useState('');
+  const [newType, setNewType] = useState('');
 
   const filtered = vehicles.filter(v =>
     v.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -44,10 +57,73 @@ export function VehicleSidebar() {
     <aside className="w-60 border-r border-border bg-sidebar flex flex-col shrink-0 overflow-hidden">
       <div className="p-3 border-b border-sidebar-border flex items-center justify-between">
         <span className="text-xs font-heading font-semibold text-sidebar-foreground uppercase tracking-wider">Vehicles</span>
-        <button onClick={() => setCollapsed(true)} className="p-1 rounded hover:bg-sidebar-accent text-sidebar-foreground">
-          <ChevronLeft className="h-4 w-4" />
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setAddOpen(true)}
+            className="p-1 rounded hover:bg-sidebar-accent text-sidebar-foreground"
+            title="Add vehicle"
+          >
+            <Plus className="h-4 w-4" />
+          </button>
+          <button onClick={() => setCollapsed(true)} className="p-1 rounded hover:bg-sidebar-accent text-sidebar-foreground">
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+        </div>
       </div>
+
+      {/* add vehicle dialog */}
+      <Dialog open={addOpen} onOpenChange={setAddOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add Vehicle</DialogTitle>
+            <DialogDescription>Enter basic details for the new vehicle.</DialogDescription>
+          </DialogHeader>
+          <form
+            className="grid gap-3"
+            onSubmit={(e) => {
+              e.preventDefault();
+              addVehicle({ name: newName, plate: newPlate, type: newType });
+              setNewName('');
+              setNewPlate('');
+              setNewType('');
+              setAddOpen(false);
+            }}
+          >
+            <input
+              type="text"
+              placeholder="Name"
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+              required
+              className="w-full rounded border px-3 py-2"
+            />
+            <input
+              type="text"
+              placeholder="Plate"
+              value={newPlate}
+              onChange={(e) => setNewPlate(e.target.value)}
+              required
+              className="w-full rounded border px-3 py-2"
+            />
+            <input
+              type="text"
+              placeholder="Type"
+              value={newType}
+              onChange={(e) => setNewType(e.target.value)}
+              required
+              className="w-full rounded border px-3 py-2"
+            />
+            <DialogFooter>
+              <button
+                type="submit"
+                className="w-full rounded-full bg-[linear-gradient(90deg,hsl(var(--primary)),hsl(var(--accent)))] px-4 py-2 text-sm font-semibold text-background"
+              >
+                Add
+              </button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
 
       <div className="p-2">
         <div className="relative">

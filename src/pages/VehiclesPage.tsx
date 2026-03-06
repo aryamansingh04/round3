@@ -2,25 +2,35 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { HealthScore } from '@/components/HealthScore';
-import { vehicles } from '@/data/mockData';
+import { useVehicles } from '@/contexts/VehiclesContext';
 import { Car, User, Gauge } from 'lucide-react';
 
 export default function VehiclesPage() {
+  const { vehicles } = useVehicles();
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-heading font-bold text-foreground">Fleet Vehicles</h1>
-          <p className="text-sm text-muted-foreground">{vehicles.length} vehicles in fleet</p>
+          <h1 className="text-2xl font-heading font-bold text-foreground">Vehicles</h1>
+          <p className="text-sm text-muted-foreground">{vehicles.length} vehicles in Vehixa fleet</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {vehicles.map((v, i) => (
             <motion.div
               key={v.id}
+              layoutId={`vehicle-card-${v.id}`}
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.05 }}
+              whileHover={{ y: -4, scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{
+                delay: i * 0.05,
+                type: 'spring',
+                stiffness: 260,
+                damping: 20,
+              }}
             >
               <Link to={`/vehicles/${v.id}`} className="block glass-card-hover p-5">
                 <div className="flex items-start gap-4">

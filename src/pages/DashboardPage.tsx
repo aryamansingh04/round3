@@ -6,7 +6,8 @@ import { DashboardLayout } from '@/components/DashboardLayout';
 import { HealthScore } from '@/components/HealthScore';
 import { MetricCard } from '@/components/MetricCard';
 import { AlertCard } from '@/components/AlertCard';
-import { vehicles, alerts, faultLogs, generateTelemetryData } from '@/data/mockData';
+import { alerts, faultLogs, generateTelemetryData } from '@/data/mockData';
+import { useVehicles } from '@/contexts/VehiclesContext';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -19,6 +20,7 @@ const itemVariants = {
 
 export default function DashboardPage() {
   const [telemetry] = useState(generateTelemetryData);
+  const { vehicles } = useVehicles();
   const avgHealth = Math.round(vehicles.reduce((a, v) => a + v.healthScore, 0) / vehicles.length);
   const criticalCount = alerts.filter(a => a.severity === 'critical' && !a.acknowledged).length;
   const activeAlerts = alerts.filter(a => !a.acknowledged);
@@ -32,7 +34,7 @@ export default function DashboardPage() {
       <motion.div variants={containerVariants} initial="hidden" animate="show" className="space-y-6">
         {/* Header */}
         <motion.div variants={itemVariants}>
-          <h1 className="text-2xl font-heading font-bold text-foreground">Fleet Dashboard</h1>
+          <h1 className="text-2xl font-heading font-bold text-foreground">Vehixa Dashboard</h1>
           <p className="text-sm text-muted-foreground">Real-time vehicle telemetry & fault monitoring</p>
         </motion.div>
 
