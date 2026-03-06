@@ -1,8 +1,9 @@
 import { NavLink as RouterNavLink, useLocation } from 'react-router-dom';
 import { LayoutDashboard, AlertTriangle, Car, Activity, BarChart3 } from 'lucide-react';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 const navItems = [
-  { to: '/', label: 'Dashboard', icon: LayoutDashboard },
+  { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/alerts', label: 'Alerts', icon: AlertTriangle },
   { to: '/vehicles', label: 'Vehicles', icon: Car },
   { to: '/telemetry', label: 'Telemetry', icon: Activity },
@@ -16,12 +17,14 @@ export function TopNav() {
     <header className="h-14 border-b border-border bg-card/60 backdrop-blur-md flex items-center px-6 sticky top-0 z-50">
       <div className="flex items-center gap-2 mr-8">
         <Activity className="h-6 w-6 text-primary" />
-        <span className="font-display text-lg tracking-wider text-primary">FLEET<span className="text-accent">IQ</span></span>
+        <span className="font-display text-lg tracking-wider text-primary">
+          FLEET<span className="text-accent">IQ</span>
+        </span>
       </div>
 
       <nav className="flex items-center gap-1">
         {navItems.map(item => {
-          const isActive = item.to === '/' ? location.pathname === '/' : location.pathname.startsWith(item.to);
+          const isActive = location.pathname.startsWith(item.to);
           return (
             <RouterNavLink
               key={item.to}
@@ -40,6 +43,7 @@ export function TopNav() {
       </nav>
 
       <div className="ml-auto flex items-center gap-3">
+        <ThemeToggle />
         <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
         <span className="text-xs text-muted-foreground">System Online</span>
       </div>

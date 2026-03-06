@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import animate from "tailwindcss-animate";
 
 export default {
   darkMode: ["class"],
@@ -97,14 +98,42 @@ export default {
           "0%": { opacity: "0", transform: "translateX(-20px)" },
           "100%": { opacity: "1", transform: "translateX(0)" },
         },
+        float: {
+          "0%, 100%": { transform: "translateY(0px)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
+        "float-slow": {
+          "0%, 100%": { transform: "translateY(0px) rotate(-0.25deg)" },
+          "50%": { transform: "translateY(-14px) rotate(0.25deg)" },
+        },
+        glitch: {
+          "0%": { transform: "translate(0)" },
+          "15%": { transform: "translate(-1px, 1px)" },
+          "30%": { transform: "translate(2px, -1px)" },
+          "45%": { transform: "translate(-2px, 0px)" },
+          "60%": { transform: "translate(1px, -2px)" },
+          "75%": { transform: "translate(-1px, 2px)" },
+          "100%": { transform: "translate(0)" },
+        },
+        scan: {
+          "0%": { transform: "translateY(-35%)", opacity: "0" },
+          "10%": { opacity: "0.65" },
+          "50%": { opacity: "0.25" },
+          "90%": { opacity: "0.65" },
+          "100%": { transform: "translateY(120%)", opacity: "0" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in": "fade-in 0.4s ease-out",
         "slide-in-left": "slide-in-left 0.3s ease-out",
+        float: "float 4.2s ease-in-out infinite",
+        "float-slow": "float-slow 7.5s ease-in-out infinite",
+        glitch: "glitch 1.6s steps(2, end) infinite",
+        scan: "scan 4.8s ease-in-out infinite",
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [animate],
 } satisfies Config;
