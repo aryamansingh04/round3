@@ -164,6 +164,22 @@ export default function LandingPage() {
     [reduce],
   );
 
+  // variants for how-it-works steps
+  const stepsContainer = useMemo(
+    () => ({
+      hidden: { opacity: 0 },
+      show: { opacity: 1, transition: { staggerChildren: 0.12 } },
+    }),
+    [],
+  );
+  const stepItem = useMemo(
+    () => ({
+      hidden: { opacity: 0, x: 20 },
+      show: { opacity: 1, x: 0, transition: { duration: 0.4, ease: [0.2, 0.8, 0.2, 1] as const } },
+    }),
+    [],
+  );
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <ScrollProgress />
@@ -365,7 +381,13 @@ export default function LandingPage() {
         <section id="how-it-works" className="mx-auto max-w-6xl px-4 pb-16 md:px-6 md:pb-24">
           <div className="rounded-[32px] border border-border/60 bg-card/30 p-8 backdrop-blur md:p-12">
             <div className="grid gap-10 md:grid-cols-12 md:items-center">
-              <div className="md:col-span-7">
+              <motion.div
+                className="md:col-span-7"
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, amount: 0.3 }}
+                variants={container}
+              >
                 <div className="text-xs font-semibold uppercase tracking-[0.30em] text-muted-foreground">How it works</div>
                 <div className="mt-4 text-4xl font-semibold leading-[1.0] tracking-tight md:text-5xl">
                   How Vehixa Detects Vehicle Faults
@@ -375,39 +397,47 @@ export default function LandingPage() {
                   consumption. Vehixa evaluates these streams against predefined safety thresholds and generates prioritized alerts
                   when abnormal behavior is detected—then highlights the affected component directly on the 3D vehicle model.
                 </div>
-              </div>
+              </motion.div>
               <div className="md:col-span-5">
-                <div className="grid gap-3 text-sm text-muted-foreground">
-                  <div className="rounded-2xl border border-border/60 bg-background/30 px-5 py-4 backdrop-blur">
-                    <div className="text-xs font-semibold uppercase tracking-[0.26em] text-muted-foreground">Step 1</div>
-                    <div className="mt-1 font-semibold text-foreground">Telemetry Data Collection</div>
-                    <div className="mt-1">
-                      Vehicle sensors generate telemetry data including engine temperature, battery voltage, speed, vibration, and
-                      fuel consumption.
-                    </div>
-                  </div>
-                  <div className="rounded-2xl border border-border/60 bg-background/30 px-5 py-4 backdrop-blur">
-                    <div className="text-xs font-semibold uppercase tracking-[0.26em] text-muted-foreground">Step 2</div>
-                    <div className="mt-1 font-semibold text-foreground">Fault Detection Engine</div>
-                    <div className="mt-1">
-                      The system evaluates telemetry values against predefined safety thresholds to detect abnormal behavior.
-                    </div>
-                  </div>
-                  <div className="rounded-2xl border border-border/60 bg-background/30 px-5 py-4 backdrop-blur">
-                    <div className="text-xs font-semibold uppercase tracking-[0.26em] text-muted-foreground">Step 3</div>
-                    <div className="mt-1 font-semibold text-foreground">Alert Generation</div>
-                    <div className="mt-1">
-                      If abnormal conditions are detected, Vehixa generates alerts categorized as Critical, Warning, or Minor.
-                    </div>
-                  </div>
-                  <div className="rounded-2xl border border-border/60 bg-background/30 px-5 py-4 backdrop-blur">
-                    <div className="text-xs font-semibold uppercase tracking-[0.26em] text-muted-foreground">Step 4</div>
-                    <div className="mt-1 font-semibold text-foreground">Visual Fault Highlighting</div>
-                    <div className="mt-1">
-                      The affected vehicle component is highlighted on the 3D vehicle model to make the issue immediately visible.
-                    </div>
-                  </div>
-                </div>
+                <motion.div
+                  className="grid gap-3 text-sm text-muted-foreground"
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true, amount: 0.3 }}
+                  variants={stepsContainer}
+                >
+                  {[
+                    {
+                      title: 'Telemetry Data Collection',
+                      text: 'Vehicle sensors generate telemetry data including engine temperature, battery voltage, speed, vibration, and fuel consumption.',
+                    },
+                    {
+                      title: 'Fault Detection Engine',
+                      text: 'The system evaluates telemetry values against predefined safety thresholds to detect abnormal behavior.',
+                    },
+                    {
+                      title: 'Alert Generation',
+                      text: 'If abnormal conditions are detected, Vehixa generates alerts categorized as Critical, Warning, or Minor.',
+                    },
+                    {
+                      title: 'Visual Fault Highlighting',
+                      text: 'The affected vehicle component is highlighted on the 3D vehicle model to make the issue immediately visible.',
+                    },
+                  ].map((step, idx) => (
+                    <motion.div
+                      key={idx}
+                      variants={stepItem}
+                      whileHover={{ scale: 1.02 }}
+                      className="rounded-2xl border border-border/60 bg-background/30 px-5 py-4 backdrop-blur"
+                    >
+                      <div className="text-xs font-semibold uppercase tracking-[0.26em] text-muted-foreground">Step {idx + 1}</div>
+                      <div className="mt-1 font-semibold text-foreground">{step.title}</div>
+                      <div className="mt-1">
+                        {step.text}
+                      </div>
+                    </motion.div>
+                  ))}
+                </motion.div>
               </div>
             </div>
           </div>
